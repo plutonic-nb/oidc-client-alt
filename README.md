@@ -1,9 +1,11 @@
-[![npm package](https://badge.fury.io/js/oidc-client.svg)](https://www.npmjs.com/package/oidc-client)
+[![npm package](https://badge.fury.io/js/oidc-client.svg)](https://www.npmjs.com/package/oidc-client-alt)
 
-# oidc-client
+# oidc-client-alt
 
 Library to provide OpenID Connect (OIDC) and OAuth2 protocol support for client-side, browser-based JavaScript client applications. 
 Also included is support for user session and access token management.
+
+This repo is meant to be an unofficial fork of `oidc-client` to support more vendors in exchange for partially giving up OpenID compliancy. For example, AzureAD is supported.
 
 ## Install
 
@@ -13,7 +15,7 @@ Node.js v4.4 or later required.
 
 ##### NPM
 
-`npm install oidc-client --save`
+`npm install oidc-client-alt --save`
 
 **NOTE**: if you're not already using [babel-polyfill](https://www.npmjs.com/package/babel-polyfill) make sure you run
 `npm install --save babel-polyfill` as well. Then include it in your build.
@@ -31,8 +33,8 @@ If you are using UMD/AMD and/or you already have included an ES6 polyfill (such 
 ## Building the Source
 
 ```
-git clone https://github.com/IdentityModel/oidc-client-js.git
-cd oidc-client-js
+git clone https://github.com/plutonic-nb/oidc-client-alt.git
+cd oidc-client-alt
 npm install
 npm run build
 ```
@@ -49,8 +51,8 @@ and then browse to [http://localhost:15000](http://localhost:15000).
 
 ## Docs
 
-Some initial docs are [here](https://github.com/IdentityModel/oidc-client-js/wiki).
+APIs are the same as `oidc-client`. See [here](https://github.com/IdentityModel/oidc-client-js/wiki).
 
 ## Feedback, Feature requests, and Bugs
 
-All are welcome on the [issue tracker](https://github.com/IdentityModel/oidc-client-js/issues).
+All are welcome on the [issue tracker](https://github.com/plutonic-nb/oidc-client-alt/issues).
