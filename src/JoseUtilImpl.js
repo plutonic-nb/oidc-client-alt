@@ -68,7 +68,7 @@ export default function getJoseUtil({ jws, KeyUtil, X509, crypto, hextob64u, b64
                 return Promise.reject(new Error("issuer was not provided"));
             }
 
-            var microsoftMatch = /^https:\/\/login\.microsoftonline\.com\/([a-z0-9-]*?)\/v2\.0$/.exec(issuer);
+            var microsoftMatch = /^https:\/\/login\.microsoftonline\.com\/([a-z0-9-]*?)\/v2\.0(?:\/*)$/.exec(issuer);
             if (microsoftMatch === null) {
                 if (payload.iss !== issuer) {
                     Log.error("JoseUtil._validateJwt: Invalid issuer in token", payload.iss);
