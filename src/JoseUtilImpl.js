@@ -67,9 +67,45 @@ export default function getJoseUtil({ jws, KeyUtil, X509, crypto, hextob64u, b64
                 Log.error("JoseUtil._validateJwt: issuer was not provided");
                 return Promise.reject(new Error("issuer was not provided"));
             }
-            if (payload.iss !== issuer) {
-                Log.error("JoseUtil._validateJwt: Invalid issuer in token", payload.iss);
-                return Promise.reject(new Error("Invalid issuer in token: " + payload.iss));
+
+            var microsoftMatch = /^https:\/\/login\.microsoftonline\.com\/([a-z0-9-]*?)\/v2\.0(?:\/*)$/.exec(issuer);
+            if (microsoftMatch === null) {
+                if (payload.iss !== issuer) {
+                    Log.error("JoseUtil._validateJwt: Invalid issuer in token", payload.iss);
+                    return Promise.reject(new Error("Invalid issuer in token: " + payload.iss));
+                }
+            } else {
+                var authorityTenant = microsoftMatch[1];
+                var responseTenant = /^https:\/\/login\.microsoftonline\.com\/([a-z0-9-]{36})\/v2\.0$/.exec(payload.iss);
+                if (responseTenant === null) {
+                    Log.error("JoseUtil._validateJwt: Invalid issuer in token", payload.iss);
+                    return Promise.reject(new Error("Invalid issuer in token: " + payload.iss));
+                } else {
+                    responseTenant = responseTenant[1];
+                }
+                switch (authorityTenant) {
+                    case "common":
+                        break;
+                    case "organizations":
+                        if (responseTenant === "9188040d-6c67-4c5b-b112-36a304b66dad") {
+                            Log.error("JoseUtil._validateJwt: Invalid tenant in issuer", responseTenant);
+                            return Promise.reject(new Error("Invalid tenant in issuer: " + responseTenant));
+                        }
+                        break;
+                    case "consumers":
+                    case "9188040d-6c67-4c5b-b112-36a304b66dad":
+                        if (responseTenant !== "9188040d-6c67-4c5b-b112-36a304b66dad") {
+                            Log.error("JoseUtil._validateJwt: Invalid tenant in issuer", responseTenant);
+                            return Promise.reject(new Error("Invalid tenant in issuer: " + responseTenant));
+                        }
+                        break;
+                    default:
+                        if (responseTenant !== authorityTenant) {
+                            Log.error("JoseUtil._validateJwt: Invalid tenant in issuer", responseTenant);
+                            return Promise.reject(new Error("Invalid tenant in issuer: " + responseTenant));
+                        }
+                        break;
+                }
             }
 
             if (!payload.aud) {
